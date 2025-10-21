@@ -13,7 +13,7 @@ COLOR_TRIGGER_THRESHOLD = 50
 COLOR_COUNT_INCLUDE_UNKNOWN = True
 
 # true_color に応じたスロットル上書き（常時）
-THROTTLE_OVERRIDE_TRUE_COLOR = {"green": 100, "white": 60}
+THROTTLE_OVERRIDE_TRUE_COLOR = {"green": 100, "white": 30}
 # 手動(user)モードでも上書きを適用
 THROTTLE_OVERRIDE_APPLY_IN_USER_MODE = True
 
@@ -23,8 +23,8 @@ COLOR_TRUE_SAME_N = 1    # 真の色“遷移”の既定閾値（使わない�
 
 # しきい値を無視して、色ごとに回数別アクションを使いたい場合
 COLOR_TRIGGER_MILESTONES = {
-    "green": { 1: "RightHand", 2: "LeftHand", 3: "Stop" },
-    "white": { 1: "PlanB" },    # 1回目の white で PlanB モデルに切替
+    "green": { 1: "RightHand", 2: "LeftHand", 3: "Stop" }
+  # 1回目の white で PlanB モデルに切替
     # "pink":  { 2: "RightHand" },  # 例：2回目だけ何かする 等
 }
 # "RightHand","LeftHand","Stop","PlanB","PlanC","PlanD","Noop"
@@ -58,7 +58,7 @@ if mode_plan not in model_plan_list:
 # モーター出力パラメータ （デューティー比：-100~100で設定）
 # スロットル用
 FORWARD_S = 80 # B
-FORWARD_C = 60 # A
+FORWARD_C = 40 # A
 STOP = 0
 REVERSE = -100 
 # ステアリング用
@@ -102,7 +102,7 @@ plotter = False
 #↑↑↑体験型イベント向けパラメータはここまで↑↑↑～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
 # 車両調整用パラメータ(motor.pyで調整した後値を入れる)
 ## ステアリングのPWMの値
-STEERING_CENTER_PWM = 370 #410 #410:newcar, #340~360:oldcar
+STEERING_CENTER_PWM = 360 #410 #410:newcar, #340~360:oldcar
 STEERING_WIDTH_PWM = 100
 # STEERING_RIGHT_PWM = STEERING_CENTER_PWM + STEERING_WIDTH_PWM
 # STEERING_LEFT_PWM = STEERING_CENTER_PWM - STEERING_WIDTH_PWM
@@ -176,7 +176,7 @@ if mode_plan in ["NN", "CNN"] : HAVE_NN = True
 
 ## 学習済みモデルのパス
 model_dir = "models"
-model_name = "model_20251021_record_practicsLeft.pth"
+model_name = "model_20251021_record_20251021_1623slow2.pth"
 model_path = os.path.join(model_dir, model_name)
 
 ## NNモデルのパラメータ
