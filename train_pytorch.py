@@ -10,6 +10,22 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader #, TensorDataset
 import matplotlib.pyplot as plt
 
+
+# ===== Device selection for Apple Silicon (MPS) / CUDA / CPU =====
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+else:
+    device = torch.device("cpu")
+print("Using device:", device)
+try:
+    torch.set_float32_matmul_precision("medium")
+except Exception:
+    pass
+# ================================================================
+
+
 import config
 
 if config.mode_plan == "CNN": 
@@ -285,22 +301,26 @@ class ConvolutionalNeuralNetwork(nn.Module):
 
 
 # トレーニング関数
+
 def train_model(model, dataloader, criterion, optimizer, model_name, start_epoch=0, epochs=config.epochs):
-    model.train()  # モデルをトレーニングモードに設定
-    loss_history = []  # Loss values for plotting
+    model.train()
+    loss_history = []
     for epoch in range(start_epoch, start_epoch + epochs):
         for inputs, targets in dataloader:
+            # move to device
+            inputs = inputs.to(device)
+            targets = targets.to(device)
             optimizer.zero_grad()
             outputs = model(inputs)
             if config.model_type == "categorical":
-                targets = targets[:,0] #.squeeze(dim=-1)
+                targets = targets[:,0].to(device)  # CrossEntropy expects (N,) labels
             loss = criterion(outputs, targets)
             loss.backward()
             optimizer.step()
-        loss_history.append(loss.item())  # Record the loss value
+        loss_history.append(loss.item())
         print(f'Epoch {epoch+1}/{epochs}, Loss: {loss.item()}')
     print("トレーニングが完了しました。")
-    
+
     # Plot and save the loss values
     plt.figure()
     plt.plot(loss_history, label='Loss')
@@ -380,6 +400,10 @@ def test_model(model, model_path, dataset,sample_num=5):
     print("\n保存したモデルをロードします。")
     load_model(model, model_path, None, model_dir)
     print(model)
+
+    # added: move model to device and eval mode
+    model = model.to(device)
+    model.eval()
  
     print("\n推論の実行例です。\nランダムに",sample_num,"コのデータを取り出して予測します。")
     # dataの取り出し
@@ -390,13 +414,14 @@ def test_model(model, model_path, dataset,sample_num=5):
     yh = torch.tensor([])
     for _ in range(sample_num):
         x1, y1 = next(tmp) # 1バッチ分のデータを取り出す
+        x1_dev = x1.to(device)
         x = torch.cat([x, x1])
         y = torch.cat([y, y1])
         if config.model_type == "linear": 
-            yh1 = model.predict(model, x1)
-            yh = torch.cat([yh, yh1])
+            yh1 = model.predict(model, x1_dev)
+            yh = torch.cat([yh, yh1.cpu()])
         elif config.model_type == "categorical":
-            yh1 = model.predict_label(model, x1)     
+            yh1 = model.predict_label(model, x1_dev)     
             yh = torch.cat([yh, torch.tensor([yh1, config.categories_Str[yh1]]).unsqueeze(0) ])
                 
     print("\n入力データ:")
@@ -440,6 +465,7 @@ def main():
     else: 
         print("学習モデルが選択されていません。config.pyのmode_planを設定してください。")
         sys.exit()
+    model = model.to(device)
     print("モデル構造: ",model)
 
     # 損失関数と最適化手法の設定

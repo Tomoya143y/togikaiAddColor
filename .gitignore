@@ -1,1 +1,13 @@
+<<<<<<< HEAD
 train_pytorch.py
+=======
+# まず全て無視
+/*
+
+# 例外で .gitignore 自身は許可（任意だけど入れておくと安心）
+!.gitignore
+
+# models フォルダとその中身は許可
+!/models/
+!/models/**
+>>>>>>> 4357114e10d018345e59b9de9d4bfc3080f4b5b6
