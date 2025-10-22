@@ -13,7 +13,7 @@ COLOR_TRIGGER_THRESHOLD = 50
 COLOR_COUNT_INCLUDE_UNKNOWN = True
 
 # true_color に応じたスロットル上書き（常時）
-THROTTLE_OVERRIDE_TRUE_COLOR = {"green": 100, "white": 30}
+THROTTLE_OVERRIDE_TRUE_COLOR = {"green": 80, "white": 30}
 # 手動(user)モードでも上書きを適用
 THROTTLE_OVERRIDE_APPLY_IN_USER_MODE = True
 
