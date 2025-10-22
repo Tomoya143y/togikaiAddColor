@@ -176,7 +176,7 @@ if mode_plan in ["NN", "CNN"] : HAVE_NN = True
 
 ## 学習済みモデルのパス
 model_dir = "models"
-model_name = "model_20251021_record_20251021_1623slow2.pth"
+model_name = "model_20251022_record_20251022_0848_tumesho_test.pth"
 model_path = os.path.join(model_dir, model_name)
 
 ## NNモデルのパラメータ
