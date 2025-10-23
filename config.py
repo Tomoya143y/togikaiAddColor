@@ -29,6 +29,13 @@ COLOR_TRIGGER_MILESTONES = {
 }
 # "RightHand","LeftHand","Stop","PlanB","PlanC","PlanD","Noop"
 
+# # 手動ステア上書きの設定
+# MANUAL_STEER_OVERRIDE_ENABLED = True      # 有効/無効
+# MANUAL_STEER_DEADZONE = 0.05              # この絶対値を超えたら手動入力ありとみなす
+# MANUAL_STEER_HOLD_SEC = 0.15              # 入力が途切れてもこの秒数だけ上書きを維持
+# JOYSTICK_STEER_BTN_RATIO = 0.6            # LB/RB で切る一定角（好みで）
+# # 既存のスケール設定を流用（ある前提）
+# JOYSTICK_STEERING_SCALE, LEFT, RIGHT, NUTRAL などは既存のまま
 
 
 ##色判定パラメーター
